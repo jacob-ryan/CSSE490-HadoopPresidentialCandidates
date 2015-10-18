@@ -23,29 +23,8 @@ import twitter4j.conf.*;
 
 public class TwitterFeedRetriever {
 
-	public static void main(String[] args) throws TwitterException {
-		T4JWrapper twitter = new T4JWrapper();
-		
-		TwitterDataWriter writer = new TwitterDataWriter("benCarson.txt");
-		writer.setPath("newPath.txt");
-		
-		TwitterRateLimitViewer rateLimits = new TwitterRateLimitViewer();
-		//GetAndWriteBenCarsonTweets();
-		//WorkingWithTrends();
-		
-		
-//		rateLimits.printSearchCallsUsage(twitter.getTwitterObject());
-//		ArrayList<Status> tweets = twitter.searchAndReturnTweets("@BenCarson", 5);
-//		writer.writeTweets(tweets);
-//		twitter.printTweets(tweets);
-		
-		
-		
-//		System.out.println(rateLimits.GetFollowerListRemaining(twitter.getTwitterObject()));
-//		ArrayList<User> followers = twitter.getFollowersForUser(twitter.getTwitterObject().getId(), (long) 300);
-//		writer.writeUsers(followers);
-		//twitter.getFollowersForUser(twitter.getTwitterObject().getId(), (long) 5);
-//		System.out.println(rateLimits.GetFollowerListRemaining(twitter.getTwitterObject()));
+	public static void main(String[] args) throws TwitterException, IOException, InterruptedException {
+		GetUserTimelineTweets();
 		
 		// Gets recent tweets from my timeline
 
@@ -187,12 +166,32 @@ public class TwitterFeedRetriever {
 //		}
 	}
 	
-	public static void GetAndWriteBenCarsonTweets() throws TwitterException {
+	public static void GetUserTimelineTweets() throws TwitterException, IOException, InterruptedException {
+		Politicians candidates = new Politicians();
+		final HashMap<String, ArrayList<String>> politicianMap = candidates.GetAllPoliticians();
+		String localTweetPath = "Tweets";
+		String hdfsPath = "/tmp/output";
 		T4JWrapper t4j = new T4JWrapper();
-		TwitterDataWriter writer = new TwitterDataWriter("benCarson.txt");
+		TwitterDataWriter writer = new TwitterDataWriter();
+		TwitterRateLimitViewer limits = new TwitterRateLimitViewer();
 		
-		ArrayList<Status> tweets = t4j.searchAndReturnTweets("@RealBenCarson", 30);
-		writer.writeTweets(tweets);
+		// get tweets and write them out
+		for (String key : politicianMap.keySet()) {
+			for (String username : politicianMap.get(key)) {
+				String localOutput = localTweetPath + "/" + username + ".txt";
+				writer.setPath(localOutput);
+				
+				if (limits.GetUserTimeLineRemainingCalls(t4j.getTwitterObject()) > 0) {
+					//ArrayList<Status> tweets = t4j.getUserTimeline(username, 200);
+					//writer.writeTweets(tweets);
+				} else {
+					limits.printGetUserTimelineUsage(t4j.getTwitterObject());
+					break;
+				}
+			}
+		}
+
+		HDFSUploader.DeleteAndUpload(hdfsPath, localTweetPath);
 	}
 	
 	public static void WorkingWithTrends() throws TwitterException {

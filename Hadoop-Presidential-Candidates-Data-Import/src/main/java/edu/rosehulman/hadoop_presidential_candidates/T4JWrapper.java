@@ -29,8 +29,13 @@ public class T4JWrapper {
 	
 	private void Initialize() {
 		ConfigurationBuilder cb = new ConfigurationBuilder();
-		// TODO: Add keys here.
-
+		ConfigReader config = new ConfigReader();
+		
+		cb.setDebugEnabled(true).setOAuthConsumerKey(config.getConsumerKey())
+		.setOAuthConsumerSecret(config.getConsumerSecret())
+		.setOAuthAccessToken(config.getAccessToken())
+		.setOAuthAccessTokenSecret(config.getAccessTokenSecret());
+		
 		TwitterFactory tf = new TwitterFactory(cb.build());
 		twitter = tf.getInstance();
 	}
