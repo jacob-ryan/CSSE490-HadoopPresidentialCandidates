@@ -2,6 +2,8 @@
 ## Custom (sensitive) files
 #################
 access-keys.txt
+tweets/
+
 
 #################
 ## Eclipse
@@ -10,6 +12,7 @@ access-keys.txt
 *.pydevproject
 bin/
 tmp/
+*.class
 *.tmp
 *.bak
 *.swp
@@ -27,6 +30,7 @@ tmp/
 # PDT-specific
 .buildpath
 
+
 #############
 ## Windows detritus
 #############
@@ -43,4 +47,3 @@ $RECYCLE.BIN/
 
 # Mac crap
 .DS_Store
-*.txt
