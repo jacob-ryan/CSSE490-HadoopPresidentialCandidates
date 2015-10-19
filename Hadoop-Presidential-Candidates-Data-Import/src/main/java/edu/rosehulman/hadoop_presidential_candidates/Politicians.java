@@ -36,7 +36,7 @@ public class Politicians {
 			add("gov_gilmore");
 		}});
 		republicans.put("Lindey Graham", new ArrayList<String>() {{
-			add("LindeyGrahamSC");
+			add("LindseyGrahamSC");
 		}});
 		republicans.put("Mike Huckabee", new ArrayList<String>() {{
 			add("GovMikeHuckabee");
@@ -49,7 +49,7 @@ public class Politicians {
 			add("JohnKasich");
 		}});
 		republicans.put("George Pataki", new ArrayList<String>() {{
-			add("GovenorPataki");
+			add("GovernorPataki");
 			add("Gpataki2016");
 		}});
 		republicans.put("Rand Paul", new ArrayList<String>() {{
@@ -68,7 +68,6 @@ public class Politicians {
 		
 		democrats.put("Lincoln Chafee", new ArrayList<String>() {{
 			add("LincolnChafee");
-			add("Chafee2016");
 		}});
 		democrats.put("Hillary Clinton", new ArrayList<String>() {{
 			add("HillaryClinton");
@@ -79,7 +78,6 @@ public class Politicians {
 			add("Lessig2016");
 		}});
 		democrats.put("Martin O'Malley", new ArrayList<String>() {{
-			add("GovenoreOMalley");
 			add("MartinOMalley");
 		}});
 		democrats.put("Bernie Sanders", new ArrayList<String>() {{
