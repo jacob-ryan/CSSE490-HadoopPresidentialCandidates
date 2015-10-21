@@ -9,5 +9,15 @@
   		<artifactId>twitter4j-core</artifactId>
   		<version>[4.0,)</version>
   	</dependency>
+  	<dependency>
+  		<groupId>org.apache.storm</groupId>
+  		<artifactId>storm-core</artifactId>
+  		<version>0.9.5</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.apache.storm</groupId>
+  		<artifactId>storm-starter</artifactId>
+  		<version>0.9.5</version>
+  	</dependency>
   </dependencies>
 </project>
