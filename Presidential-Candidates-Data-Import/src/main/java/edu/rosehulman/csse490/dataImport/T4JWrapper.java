@@ -127,9 +127,12 @@ public class T4JWrapper
 		ArrayList<Status> tweets = new ArrayList<Status>();
 		long lastID = Long.MAX_VALUE;
 		Query query = new Query(searchTerm);
-
-		while (tweets.size() < amountOfTweets)
+		int previousSize = -1;
+		
+		while (tweets.size() < amountOfTweets && tweets.size() != previousSize)
 		{
+			previousSize = tweets.size();
+			
 			if (amountOfTweets - tweets.size() > 100)
 			{
 				query.setCount(100);

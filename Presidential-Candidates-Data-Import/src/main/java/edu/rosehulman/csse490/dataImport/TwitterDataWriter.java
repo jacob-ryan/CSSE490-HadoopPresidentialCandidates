@@ -12,18 +12,15 @@ import java.util.Set;
 import twitter4j.Status;
 import twitter4j.User;
 
-public class TwitterDataWriter
-{
+public class TwitterDataWriter {
 	private String outputPath;
 	private final String GENERIC_DELIMETER = "\t";
 
-	public TwitterDataWriter(String outputPath)
-	{
+	public TwitterDataWriter(String outputPath) {
 		this.outputPath = outputPath;
 	}
 
-	public TwitterDataWriter()
-	{
+	public TwitterDataWriter() {
 		outputPath = "/tmp/output/TwitterData/" + System.currentTimeMillis();
 	}
 
@@ -32,38 +29,69 @@ public class TwitterDataWriter
 	 * 
 	 * @param path
 	 */
-	public void setPath(String path)
-	{
+	public void setPath(String path) {
 		outputPath = path;
 	}
 
-	private String FormatTweet(Status status)
-	{
+	private String FormatTweet(Status status) {
 		StringBuilder tweet = new StringBuilder();
 		String tweetText = status.getText().replace("\n", " ");
-		tweet.append(status.getId() + GENERIC_DELIMETER + tweetText + "\n");
+		// tweet.append(status.getId() + GENERIC_DELIMETER + tweetText + "\n");
+		tweet.append(tweetText + "\n");
 
 		return tweet.toString();
 	}
 
 	// region Write Tweets
 	/**
-	 * Writes a list of tweets to given output path. This does not write duplicate tweets based on their ID of the given list.
+	 * Writes a list of tweets to given output path. This does not write
+	 * duplicate tweets based on their ID of the given list.
 	 * 
 	 * @param tweets
 	 */
-	public void writeTweets(List<Status> tweets)
-	{
+	public void writeTweets(List<Status> tweets) {
 		Set<Long> idSet = new HashSet<Long>();
 
-		for (Status stat : tweets)
-		{
-			if (!idSet.contains(stat.getId()))
-			{
+		for (Status stat : tweets) {
+			if (!idSet.contains(stat.getId())) {
 				idSet.add(stat.getId());
 				writeTweet(stat);
 			}
 		}
+	}
+
+	public void writeRetweets(List<Status> tweets) {
+
+		Set<Long> idSet = new HashSet<Long>();
+
+		for (int i = 0; i < tweets.size(); i++) {
+			if (!idSet.contains(tweets.get(i).getId())) {
+				idSet.add(tweets.get(i).getId());
+				writeRetweet(tweets.get(i));
+			}
+		}
+	}
+
+
+	private void writeRetweet(Status tweet) {
+		try (Writer writer = new BufferedWriter(new FileWriter(outputPath, true)))
+		{
+			writer.write(Formatretweet(tweet));
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}		
+	}
+	
+	private String Formatretweet(Status status) {
+		StringBuilder tweet = new StringBuilder();
+		Long id = status.getId();
+		String tweetText = status.getText().replace("\n", " ");
+		int recount = status.getRetweetCount();
+		tweet.append(id + GENERIC_DELIMETER + tweetText + GENERIC_DELIMETER + recount + "\n");
+
+		return tweet.toString();
 	}
 
 	/**
@@ -71,14 +99,11 @@ public class TwitterDataWriter
 	 * 
 	 * @param tweet
 	 */
-	public void writeTweet(Status tweet)
-	{
-		try (Writer writer = new BufferedWriter(new FileWriter(outputPath, true)))
-		{
+	public void writeTweet(Status tweet) {
+		try (Writer writer = new BufferedWriter(
+				new FileWriter(outputPath, true))) {
 			writer.write(FormatTweet(tweet));
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -92,15 +117,13 @@ public class TwitterDataWriter
 	 * @param user
 	 * @throws IOException
 	 */
-	public void writeUser(User user)
-	{
-		try (Writer writer = new BufferedWriter(new FileWriter(outputPath, true)))
-		{
-			writer.write(user.getId() + GENERIC_DELIMETER + user.getScreenName() + GENERIC_DELIMETER + user.getName() + GENERIC_DELIMETER
-					+ user.getCreatedAt().toString() + "\n");
-		}
-		catch (Exception e)
-		{
+	public void writeUser(User user) {
+		try (Writer writer = new BufferedWriter(
+				new FileWriter(outputPath, true))) {
+			writer.write(user.getId() + GENERIC_DELIMETER
+					+ user.getScreenName() + GENERIC_DELIMETER + user.getName()
+					+ GENERIC_DELIMETER + user.getCreatedAt().toString() + "\n");
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -111,10 +134,8 @@ public class TwitterDataWriter
 	 * @param users
 	 * @throws IOException
 	 */
-	public void writeUsers(ArrayList<User> users)
-	{
-		for (User user : users)
-		{
+	public void writeUsers(ArrayList<User> users) {
+		for (User user : users) {
 			writeUser(user);
 		}
 	}

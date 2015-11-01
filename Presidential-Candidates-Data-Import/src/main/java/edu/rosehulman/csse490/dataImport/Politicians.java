@@ -70,7 +70,7 @@ public class Politicians
 		republicans.put("Bobby Jindal", new ArrayList<String>()
 		{
 			{
-				add("Jindalin2016");
+				//add("Jindalin2016");
 				add("BobbyJindal");
 			}
 		});

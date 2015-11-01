@@ -18,11 +18,9 @@ public class TwitterFeedRetriever
 	{
 		TwitterFeedRetriever tweets = new TwitterFeedRetriever();
 
-		tweets.GetAllPoliticianTimelineTweets();
-
-		T4JWrapper t4j = new T4JWrapper();
-		TwitterRateLimitViewer limit = new TwitterRateLimitViewer();
-		limit.printGetUserTimelineUsage(t4j.getTwitterObject());
+		//tweets.WriteAllPoliticianSearchTweets(600);
+		tweets.limits.printSearchCallsUsage(tweets.twitter.getTwitterObject());
+		//tweets.GetAllPoliticianTimelineTweets(200);
 	}
 
 	public TwitterFeedRetriever()
@@ -32,40 +30,82 @@ public class TwitterFeedRetriever
 		writer = new TwitterDataWriter();
 		candidates = new Politicians();
 	}
-
-	public void GetAllPoliticianTimelineTweets() throws TwitterException, IOException, InterruptedException
+	
+	public void WriteAllPoliticianSearchTweets(int tweetsPerCandidate) throws TwitterException, IOException, InterruptedException
 	{
 		HashMap<String, ArrayList<String>> politicianMap = candidates.GetAllPoliticians();
-		int callsRemaining = limits.GetUserTimeLineRemainingCalls(twitter.getTwitterObject());
-
+		
 		String localTweetPath = "Tweets";
-		String hdfsPath = "/tmp/output";
-
-		// get tweets and write them out
+		String hdfsPath = "/tmp/TweetData";
+		
 		for (String key : politicianMap.keySet())
 		{
 			for (String username : politicianMap.get(key))
 			{
 				String localOutput = localTweetPath + "/" + username + ".txt";
 				writer.setPath(localOutput);
-
-				if (callsRemaining-- > 0)
+				
+				int callsRemaining = limits.GetSearchTweetsRemainingCalls(twitter.getTwitterObject());
+				
+				if (callsRemaining - (tweetsPerCandidate / 100) >= 0)
 				{
 					System.out.println("Getting tweets for " + username);
-					System.out.println(callsRemaining);
+					System.out.println(callsRemaining - (tweetsPerCandidate / 100));
 
-					ArrayList<Status> tweets = twitter.getUserTimeline(username, 200);
+					ArrayList<Status> tweets = twitter.searchAndReturnTweets("@"+username, tweetsPerCandidate);
 					writer.writeTweets(tweets);
 				}
 				else
 				{
-					limits.printGetUserTimelineUsage(twitter.getTwitterObject());
+					limits.printSearchCallsUsage(twitter.getTwitterObject());
+					HDFSUploader.DeleteAndUpload(hdfsPath, localTweetPath);
+					return;
+				}
+			}
+		}
+		
+		limits.printSearchCallsUsage(twitter.getTwitterObject());
+
+		HDFSUploader.DeleteAndUpload(hdfsPath, localTweetPath);
+	}
+
+	public void GetAllPoliticianTimelineTweets(int tweetsPerCandidate) throws TwitterException, IOException, InterruptedException
+	{
+		HashMap<String, ArrayList<String>> politicianMap = candidates.GetAllPoliticians();
+
+		String localTweetPath = "Retweets";
+		String hdfsPath = "/tmp/RetweetData";
+
+		for (String key : politicianMap.keySet())
+		{
+			for (String username : politicianMap.get(key))
+			{
+				String localOutput = localTweetPath + "/" + username + ".txt";
+				writer.setPath(localOutput);
+				
+				int callsRemaining = limits.GetUserTimeLineRemainingCalls(twitter.getTwitterObject());
+				
+				if (callsRemaining - (tweetsPerCandidate / 200) >= 0)
+				{
+					System.out.println("Getting tweets for " + username);
+					System.out.println(callsRemaining - (tweetsPerCandidate / 200));
+
+					ArrayList<Status> tweets = twitter.getUserTimeline("@"+username, tweetsPerCandidate);				
+					
+					writer.writeRetweets(tweets);
+						
+				}
+				else
+				{
+					limits.GetUserTimeLineRemainingCalls(twitter.getTwitterObject());
 					HDFSUploader.DeleteAndUpload(hdfsPath, localTweetPath);
 					return;
 				}
 			}
 		}
 
+		limits.printGetUserTimelineUsage(twitter.getTwitterObject());
+		
 		HDFSUploader.DeleteAndUpload(hdfsPath, localTweetPath);
 	}
 }

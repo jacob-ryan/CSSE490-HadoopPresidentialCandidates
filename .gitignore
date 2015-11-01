@@ -47,3 +47,10 @@ $RECYCLE.BIN/
 
 # Mac crap
 .DS_Store
+*.txt
+*.jar
+*.jar
+Presidential-Candidates-Storm/target/Presidential-Candidates-Storm-1.0.jar
+*.lst
+*.edu
+Presidential-Candidates-Storm/target/Presidential-Candidates-Storm-1.0-jar-with-dependencies.jar
