@@ -1,5 +1,6 @@
 package edu.rosehulman.csse490.storm;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import twitter4j.Status;
@@ -13,10 +14,12 @@ import backtype.storm.tuple.Values;
 
 public class WordSplitBolt implements IBasicBolt
 {
+	private ArrayList<String> candidates = new ArrayList<String>();
+	
 	@Override
 	public void declareOutputFields(OutputFieldsDeclarer declarer)
 	{
-		declarer.declare(new Fields("word"));
+		declarer.declare(new Fields("word", "keyword"));
 	}
 
 	@Override
@@ -36,10 +39,24 @@ public class WordSplitBolt implements IBasicBolt
 		Status tweet = (Status) input.getValueByField("tweet");
 		String text = tweet.getText().replaceAll("\\p{Punct}", "").toLowerCase();
 		String[] words = text.split(" ");
-
+		String keyword = "NONAME";
+		boolean flag = false;
+		
+		for (int i = 0; i < words.length; i++) {
+			for (int j = 0; j < this.candidates.size(); j++) {
+				if (words[i].toLowerCase().equals(this.candidates.get(j).toLowerCase())) {
+					keyword = words[i];
+					flag = true;
+					break;
+				}
+			}
+			if (flag)
+				break;
+		}
+		
 		for (String word : words)
 		{
-			collector.emit(new Values(word));
+			collector.emit(new Values(word, keyword));
 		}
 	}
 
@@ -47,5 +64,7 @@ public class WordSplitBolt implements IBasicBolt
 	@Override
 	public void prepare(Map arg0, TopologyContext arg1)
 	{
+		Politicians politicians = new Politicians();
+		this.candidates = politicians.GetAllPoliticians();
 	}
 }

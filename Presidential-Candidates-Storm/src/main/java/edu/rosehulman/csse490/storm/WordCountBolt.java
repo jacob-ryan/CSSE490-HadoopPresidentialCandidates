@@ -16,7 +16,7 @@ import backtype.storm.tuple.Tuple;
 public class WordCountBolt implements IBasicBolt
 {
 	private HashMap<String, Integer> countMap = new HashMap<String, Integer>();
-	private File file = new File("/tmp/foobar.txt");
+	private String filePath = "/tmp/Tweets/";
 
 	@Override
 	public void declareOutputFields(OutputFieldsDeclarer declarer)
@@ -39,7 +39,8 @@ public class WordCountBolt implements IBasicBolt
 	public void execute(Tuple input, BasicOutputCollector collector)
 	{
 		String word = (String) input.getValueByField("word");
-
+		String keyword = (String) input.getValueByField("keyword");
+		
 		Integer count = countMap.get(word);
 		if (count == null)
 			count = 0;
@@ -49,7 +50,7 @@ public class WordCountBolt implements IBasicBolt
 
 		try
 		{
-			FileWriter writer = new FileWriter(this.file, true);
+			FileWriter writer = new FileWriter(new File(this.filePath + keyword), true);
 			writer.write(word + ": " + countMap.get(word) + "\n");
 			writer.close();
 		}

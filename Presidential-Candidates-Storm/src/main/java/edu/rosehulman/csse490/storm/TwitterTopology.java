@@ -1,5 +1,7 @@
 package edu.rosehulman.csse490.storm;
 
+import java.util.ArrayList;
+
 import storm.starter.spout.TwitterSampleSpout;
 import backtype.storm.Config;
 import backtype.storm.StormSubmitter;
@@ -12,10 +14,16 @@ public class TwitterTopology
 {
 	public static void main(String[] args) throws AlreadyAliveException, InvalidTopologyException
 	{
-		// String[] keyWords = GetPoliticians();
+		Politicians politicians = new Politicians();
+		ArrayList<String> candidates = politicians.GetAllPoliticians();
+		
+		String[] keyWords = new String[candidates.size()];
+		
+		for (int i = 0; i < candidates.size(); i++) {
+			keyWords[i] = candidates.get(i);
+		}
+		
 		ConfigReader config = new ConfigReader();
-		String[] keyWords = new String[1];
-		keyWords[0] = "Donald Trump";
 
 		TopologyBuilder builder = new TopologyBuilder();
 		builder.setSpout("twitter",
@@ -23,7 +31,7 @@ public class TwitterTopology
 						keyWords));
 
 		builder.setBolt("split", new WordSplitBolt()).shuffleGrouping("twitter");
-		builder.setBolt("count", new WordCountBolt()).fieldsGrouping("split", new Fields("word"));
+		builder.setBolt("count", new WordCountBolt()).fieldsGrouping("split", new Fields("keyword"));
 
 		Config configS = new Config();
 		configS.setDebug(false);
@@ -32,8 +40,6 @@ public class TwitterTopology
 		configS.setMaxSpoutPending(200);
 
 		StormSubmitter.submitTopology("twitter", configS, builder.createTopology());
-		// LocalCluster cluster = new LocalCluster();
-		// cluster.submitTopology("twitter", configS, builder.createTopology());
 		System.out.println("Twitter topology should be running...");
 	}
 }
