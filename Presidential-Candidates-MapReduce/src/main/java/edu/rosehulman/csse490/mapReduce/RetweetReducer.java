@@ -18,7 +18,7 @@ public class RetweetReducer extends Reducer<Text, IntWritable, Text, DoubleWrita
 			count++;
 		}
 		
-		double average = sum / count;
+		double average = (double) sum / count;
 		
 		context.write(key, new DoubleWritable(average));
 	} 

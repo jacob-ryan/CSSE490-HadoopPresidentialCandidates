@@ -12,7 +12,7 @@ public class HDFSUploader
 
 	private static void RemoveFromHDFS(String path, String directoryName) throws IOException, InterruptedException
 	{
-		String command = "hadoop fs -rm -r " + path + "/" + directoryName + "/";
+		String command = "hadoop fs -rm -r " + path + "/" + directoryName;
 		System.out.println(command);
 		Runtime.getRuntime().exec(command).waitFor();
 	}

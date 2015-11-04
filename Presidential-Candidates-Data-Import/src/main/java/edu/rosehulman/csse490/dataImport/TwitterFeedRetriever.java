@@ -35,8 +35,8 @@ public class TwitterFeedRetriever
 	{
 		HashMap<String, ArrayList<String>> politicianMap = candidates.GetAllPoliticians();
 		
-		String localTweetPath = "Tweets";
-		String hdfsPath = "/tmp/TweetData";
+		String localTweetPath = "TweetData";
+		String hdfsPath = "/tmp";
 		
 		for (String key : politicianMap.keySet())
 		{
@@ -73,8 +73,8 @@ public class TwitterFeedRetriever
 	{
 		HashMap<String, ArrayList<String>> politicianMap = candidates.GetAllPoliticians();
 
-		String localTweetPath = "Retweets";
-		String hdfsPath = "/tmp/RetweetData";
+		String localTweetPath = "RetweetData";
+		String hdfsPath = "/tmp";
 
 		String localOutput = localTweetPath + "/retweets.txt";
 		writer.setPath(localOutput);
@@ -87,7 +87,7 @@ public class TwitterFeedRetriever
 				
 				if (callsRemaining - (tweetsPerCandidate / 200) >= 0)
 				{
-					System.out.println("Getting tweets for " + username);
+					System.out.println("Getting retweets for " + username);
 					System.out.println(callsRemaining - (tweetsPerCandidate / 200));
 
 					ArrayList<Status> tweets = twitter.getUserTimeline("@"+username, tweetsPerCandidate);				

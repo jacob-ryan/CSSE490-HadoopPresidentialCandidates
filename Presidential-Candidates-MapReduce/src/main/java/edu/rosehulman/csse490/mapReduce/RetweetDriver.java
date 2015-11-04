@@ -35,8 +35,12 @@ public class RetweetDriver extends Configured implements Tool{
 		job.setMapperClass(RetweetMapper.class);
 		job.setReducerClass(RetweetReducer.class);
 		
+		job.setMapOutputKeyClass(Text.class);
+		job.setMapOutputValueClass(IntWritable.class);
+		
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(DoubleWritable.class);
+		
 		job.waitForCompletion(true);
 		return 0;
 	}
