@@ -19,8 +19,7 @@ public class RetweetDriver extends Configured implements Tool{
 		System.exit(exitCode);
 	}
 	public int run(String[] args) throws Exception {
-		// TODO Auto-generated method stub
-		if (args.length != 3) {
+		if (args.length != 2) {
 			System.err.println("Usage: inputDirectory outputDirectory");
 			System.exit(-1);
 		}
