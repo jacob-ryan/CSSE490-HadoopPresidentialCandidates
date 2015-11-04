@@ -12,6 +12,7 @@ tweets/
 *.pydevproject
 bin/
 tmp/
+target/
 *.class
 *.tmp
 *.bak
