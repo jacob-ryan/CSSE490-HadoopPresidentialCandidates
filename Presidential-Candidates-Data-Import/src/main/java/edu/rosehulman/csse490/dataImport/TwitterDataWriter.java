@@ -60,23 +60,23 @@ public class TwitterDataWriter {
 		}
 	}
 
-	public void writeRetweets(List<Status> tweets) {
+	public void writeRetweets(List<Status> tweets, String username) {
 
 		Set<Long> idSet = new HashSet<Long>();
 
 		for (int i = 0; i < tweets.size(); i++) {
 			if (!idSet.contains(tweets.get(i).getId())) {
 				idSet.add(tweets.get(i).getId());
-				writeRetweet(tweets.get(i));
+				writeRetweet(tweets.get(i), username);
 			}
 		}
 	}
 
 
-	private void writeRetweet(Status tweet) {
+	private void writeRetweet(Status tweet, String username) {
 		try (Writer writer = new BufferedWriter(new FileWriter(outputPath, true)))
 		{
-			writer.write(Formatretweet(tweet));
+			writer.write(Formatretweet(tweet, username));
 		}
 		catch (Exception e)
 		{
@@ -84,12 +84,12 @@ public class TwitterDataWriter {
 		}		
 	}
 	
-	private String Formatretweet(Status status) {
+	private String Formatretweet(Status status, String username) {
 		StringBuilder tweet = new StringBuilder();
-		Long id = status.getId();
 		String tweetText = status.getText().replace("\n", " ");
 		int recount = status.getRetweetCount();
-		tweet.append(id + GENERIC_DELIMETER + tweetText + GENERIC_DELIMETER + recount + "\n");
+		
+		tweet.append(username + GENERIC_DELIMETER + tweetText + GENERIC_DELIMETER + recount + "\n");
 
 		return tweet.toString();
 	}

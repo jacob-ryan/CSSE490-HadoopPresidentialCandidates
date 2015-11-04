@@ -18,9 +18,9 @@ public class TwitterFeedRetriever
 	{
 		TwitterFeedRetriever tweets = new TwitterFeedRetriever();
 
-		//tweets.WriteAllPoliticianSearchTweets(600);
+		//tweets.WriteAllPoliticianSearchTweets(50);
 		tweets.limits.printSearchCallsUsage(tweets.twitter.getTwitterObject());
-		//tweets.GetAllPoliticianTimelineTweets(200);
+		tweets.GetAllPoliticianTimelineTweets(10);
 	}
 
 	public TwitterFeedRetriever()
@@ -76,13 +76,13 @@ public class TwitterFeedRetriever
 		String localTweetPath = "Retweets";
 		String hdfsPath = "/tmp/RetweetData";
 
+		String localOutput = localTweetPath + "/retweets.txt";
+		writer.setPath(localOutput);
+		
 		for (String key : politicianMap.keySet())
 		{
 			for (String username : politicianMap.get(key))
-			{
-				String localOutput = localTweetPath + "/" + username + ".txt";
-				writer.setPath(localOutput);
-				
+			{				
 				int callsRemaining = limits.GetUserTimeLineRemainingCalls(twitter.getTwitterObject());
 				
 				if (callsRemaining - (tweetsPerCandidate / 200) >= 0)
@@ -92,8 +92,7 @@ public class TwitterFeedRetriever
 
 					ArrayList<Status> tweets = twitter.getUserTimeline("@"+username, tweetsPerCandidate);				
 					
-					writer.writeRetweets(tweets);
-						
+					writer.writeRetweets(tweets, username);
 				}
 				else
 				{
