@@ -1,8 +1,5 @@
 package edu.rosehulman.csse490.storm;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,16 +9,16 @@ import backtype.storm.topology.IBasicBolt;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
+import backtype.storm.tuple.Values;
 
 public class WordCountBolt implements IBasicBolt
 {
 	private HashMap<String, Integer> countMap = new HashMap<String, Integer>();
-	private String filePath = "/tmp/Tweets/";
 
 	@Override
 	public void declareOutputFields(OutputFieldsDeclarer declarer)
 	{
-		declarer.declare(new Fields("word", "count"));
+		declarer.declare(new Fields("keyword", "word", "count"));
 	}
 
 	@Override
@@ -47,17 +44,8 @@ public class WordCountBolt implements IBasicBolt
 		count++;
 
 		countMap.put(word, count);
-
-		try
-		{
-			FileWriter writer = new FileWriter(new File(this.filePath + keyword), true);
-			writer.write(word + ": " + countMap.get(word) + "\n");
-			writer.close();
-		}
-		catch (IOException e)
-		{
-			throw new RuntimeException(e);
-		}
+		
+		collector.emit(new Values(keyword, word, count));
 	}
 
 	@SuppressWarnings("rawtypes")

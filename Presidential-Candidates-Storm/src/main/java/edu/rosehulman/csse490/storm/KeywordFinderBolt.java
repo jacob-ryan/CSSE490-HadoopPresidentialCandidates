@@ -12,14 +12,14 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
 
-public class WordSplitBolt implements IBasicBolt
+public class KeywordFinderBolt implements IBasicBolt
 {
 	private ArrayList<String> candidates = new ArrayList<String>();
 	
 	@Override
 	public void declareOutputFields(OutputFieldsDeclarer declarer)
 	{
-		declarer.declare(new Fields("word", "keyword"));
+		declarer.declare(new Fields("keyword", "word", "text", "id"));
 	}
 
 	@Override
@@ -38,6 +38,7 @@ public class WordSplitBolt implements IBasicBolt
 	{
 		Status tweet = (Status) input.getValueByField("tweet");
 		String text = tweet.getText().replaceAll("\\p{Punct}", "").toLowerCase();
+		long id = tweet.getId();
 		String[] words = text.split(" ");
 		String keyword = "NONAME";
 		boolean flag = false;
@@ -56,7 +57,7 @@ public class WordSplitBolt implements IBasicBolt
 		
 		for (String word : words)
 		{
-			collector.emit(new Values(word, keyword));
+			collector.emit(new Values(keyword, word, text, id));
 		}
 	}
 
