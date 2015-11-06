@@ -1,55 +1,55 @@
 package edu.csse490.storm;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
-import twitter4j.Status;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.BasicOutputCollector;
 import backtype.storm.topology.IBasicBolt;
 import backtype.storm.topology.OutputFieldsDeclarer;
+import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
+import backtype.storm.tuple.Values;
 
-public class WritingBolt implements IBasicBolt {
-
-	public void declareOutputFields(OutputFieldsDeclarer arg0) {
-		// TODO Auto-generated method stub
-		
+public class WordCountBolt implements IBasicBolt {
+	private HashMap<String, Integer> countMap = new HashMap<String, Integer>();
+	
+	@Override
+	public void declareOutputFields(OutputFieldsDeclarer declarer) {
+		declarer.declare(new Fields("word", "count", "keyword"));
 	}
 
+	@Override
 	public Map<String, Object> getComponentConfiguration() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public void cleanup() {
 		// TODO Auto-generated method stub
 		
 	}
 
+	@Override
 	public void execute(Tuple input, BasicOutputCollector collector) {
 		String word = (String) input.getValueByField("word");
-		int count = (Integer) input.getValueByField("count");
 		String keyword = (String) input.getValueByField("keyword");
 		
-		try
-		{
-			FileWriter writer = new FileWriter(
-					new File("tmp/StormLab/" + keyword + ".txt"), true);
-			
-			writer.write(word + ":" + count + "\n");
-			writer.close();
-		}
-		catch (IOException e)
-		{
-			throw new RuntimeException(e);
-		}
+		Integer count = countMap.get(word);
+		if (count == null)
+			count = 0;
+		count++;
+
+		countMap.put(word, count);
+		
+		collector.emit(new Values(word, count, keyword));
 	}
 
+	@Override
 	public void prepare(Map arg0, TopologyContext arg1) {
 		// TODO Auto-generated method stub
+		
 	}
 
 }
