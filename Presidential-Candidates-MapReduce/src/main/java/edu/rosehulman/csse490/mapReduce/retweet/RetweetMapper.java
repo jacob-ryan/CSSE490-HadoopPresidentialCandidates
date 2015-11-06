@@ -1,4 +1,4 @@
-package edu.rosehulman.csse490.mapReduce;
+package edu.rosehulman.csse490.mapReduce.retweet;
 
 import java.io.IOException;
 

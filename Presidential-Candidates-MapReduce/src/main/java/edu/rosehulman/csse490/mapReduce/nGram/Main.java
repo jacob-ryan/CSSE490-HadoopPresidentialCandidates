@@ -1,4 +1,4 @@
-package edu.rosehulman.csse490.mapReduce;
+package edu.rosehulman.csse490.mapReduce.nGram;
 
 import java.util.*;
 
@@ -26,7 +26,7 @@ public class Main
 		System.out.println("Presidential Candidates MapReduce application has launched all jobs...");
 	}
 	
-	public static void main(String[] args) throws Exception
+	public static void main(String[] args)
 	{
 		new Main(args);
 	}
@@ -46,9 +46,8 @@ public class Main
 		{
 			try
 			{
-				int exitCode = ToolRunner.run(new PCDriver(this.candidateName), Main.this.args);
+				int exitCode = ToolRunner.run(new NGramDriver(this.candidateName), Main.this.args);
 				System.out.println("Job for " + this.candidateName + " has completed with exit code: " + exitCode);
-				System.exit(exitCode);
 			}
 			catch (Exception e)
 			{

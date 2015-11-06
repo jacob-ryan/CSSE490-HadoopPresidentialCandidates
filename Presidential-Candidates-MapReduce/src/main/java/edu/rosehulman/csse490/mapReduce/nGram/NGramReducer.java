@@ -1,11 +1,11 @@
-package edu.rosehulman.csse490.mapReduce;
+package edu.rosehulman.csse490.mapReduce.nGram;
 
 import java.io.*;
 
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapreduce.*;
 
-public class PCReducer extends Reducer<Text, NullWritable, Text, IntWritable>
+public class NGramReducer extends Reducer<Text, NullWritable, Text, IntWritable>
 {
 	@SuppressWarnings("unused")
 	@Override

@@ -1,4 +1,4 @@
-package edu.rosehulman.csse490.mapReduce;
+package edu.rosehulman.csse490.mapReduce.nGram;
 
 import java.io.*;
 import java.util.regex.*;
@@ -6,7 +6,7 @@ import java.util.regex.*;
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapreduce.*;
 
-public class PCMapper extends Mapper<LongWritable, Text, Text, NullWritable>
+public class NGramMapper extends Mapper<LongWritable, Text, Text, NullWritable>
 {
 	@Override
 	public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException
