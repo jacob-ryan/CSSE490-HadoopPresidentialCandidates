@@ -1,21 +1,17 @@
 package edu.rosehulman.csse490.storm;
 
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.*;
 
-import twitter4j.Status;
-import backtype.storm.task.TopologyContext;
-import backtype.storm.topology.BasicOutputCollector;
-import backtype.storm.topology.IBasicBolt;
-import backtype.storm.topology.OutputFieldsDeclarer;
-import backtype.storm.tuple.Fields;
-import backtype.storm.tuple.Tuple;
-import backtype.storm.tuple.Values;
+import twitter4j.*;
+import backtype.storm.task.*;
+import backtype.storm.topology.*;
+import backtype.storm.tuple.*;
+import edu.rosehulman.csse490.dataImport.*;
 
 public class KeywordFinderBolt implements IBasicBolt
 {
 	private ArrayList<String> candidates = new ArrayList<String>();
-	
+
 	@Override
 	public void declareOutputFields(OutputFieldsDeclarer declarer)
 	{
@@ -42,19 +38,24 @@ public class KeywordFinderBolt implements IBasicBolt
 		String[] words = text.split(" ");
 		String keyword = "NONAME";
 		boolean flag = false;
-		
-		for (int i = 0; i < words.length; i++) {
-			for (int j = 0; j < this.candidates.size(); j++) {
-				if (words[i].toLowerCase().equals(this.candidates.get(j).toLowerCase())) {
-					keyword = words[i];
+
+		for (String word : words)
+		{
+			for (int j = 0; j < this.candidates.size(); j++)
+			{
+				if (word.toLowerCase().equals(this.candidates.get(j).toLowerCase()))
+				{
+					keyword = word;
 					flag = true;
 					break;
 				}
 			}
 			if (flag)
+			{
 				break;
+			}
 		}
-		
+
 		for (String word : words)
 		{
 			collector.emit(new Values(keyword, word, text, id));
@@ -66,6 +67,6 @@ public class KeywordFinderBolt implements IBasicBolt
 	public void prepare(Map arg0, TopologyContext arg1)
 	{
 		Politicians politicians = new Politicians();
-		this.candidates = politicians.GetAllPoliticians();
+		this.candidates = politicians.GetAllHandles();
 	}
 }

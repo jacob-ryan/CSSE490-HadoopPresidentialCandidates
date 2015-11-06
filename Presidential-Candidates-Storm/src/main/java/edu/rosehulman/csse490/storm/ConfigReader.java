@@ -5,12 +5,12 @@ import java.io.*;
 public class ConfigReader
 {
 	private static final String fileLocation = "./access-keys.txt";
-	
+
 	private String consumerKey;
 	private String consumerSecret;
 	private String accessToken;
 	private String accessTokenSecret;
-	
+
 	public ConfigReader()
 	{
 		try
@@ -32,22 +32,22 @@ public class ConfigReader
 			System.exit(1);
 		}
 	}
-	
+
 	public String getConsumerKey()
 	{
 		return this.consumerKey;
 	}
-	
+
 	public String getConsumerSecret()
 	{
 		return this.consumerSecret;
 	}
-	
+
 	public String getAccessToken()
 	{
 		return this.accessToken;
 	}
-	
+
 	public String getAccessTokenSecret()
 	{
 		return this.accessTokenSecret;

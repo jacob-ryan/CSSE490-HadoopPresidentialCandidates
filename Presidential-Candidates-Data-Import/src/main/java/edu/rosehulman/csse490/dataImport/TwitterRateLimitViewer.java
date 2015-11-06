@@ -1,10 +1,8 @@
 package edu.rosehulman.csse490.dataImport;
 
-import java.util.Map;
+import java.util.*;
 
-import twitter4j.RateLimitStatus;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
+import twitter4j.*;
 
 public class TwitterRateLimitViewer
 {
@@ -32,22 +30,22 @@ public class TwitterRateLimitViewer
 
 	public void printSearchCallsUsage(Twitter twitter) throws TwitterException
 	{
-		printUsage(SEARCH_TWEETS_ROUTE, twitter);
+		printUsage(this.SEARCH_TWEETS_ROUTE, twitter);
 	}
 
 	public void printGetFollowersUsage(Twitter twitter) throws TwitterException
 	{
-		printUsage(FOLLOWERS_LIST_ROUTE, twitter);
+		printUsage(this.FOLLOWERS_LIST_ROUTE, twitter);
 	}
 
 	public void printGetFriendsUsage(Twitter twitter) throws TwitterException
 	{
-		printUsage(FRIENDS_LIST_ROUTE, twitter);
+		printUsage(this.FRIENDS_LIST_ROUTE, twitter);
 	}
 
 	public void printGetUserTimelineUsage(Twitter twitter) throws TwitterException
 	{
-		printUsage(USER_TIMELINE_ROUTE, twitter);
+		printUsage(this.USER_TIMELINE_ROUTE, twitter);
 	}
 
 	private int GetRemainingCalls(String route, Twitter twitter) throws TwitterException
@@ -58,21 +56,21 @@ public class TwitterRateLimitViewer
 
 	public int GetSearchTweetsRemainingCalls(Twitter twitter) throws TwitterException
 	{
-		return GetRemainingCalls(SEARCH_TWEETS_ROUTE, twitter);
+		return GetRemainingCalls(this.SEARCH_TWEETS_ROUTE, twitter);
 	}
 
 	public int GetFollowersListRemainingCalls(Twitter twitter) throws TwitterException
 	{
-		return GetRemainingCalls(FOLLOWERS_LIST_ROUTE, twitter);
+		return GetRemainingCalls(this.FOLLOWERS_LIST_ROUTE, twitter);
 	}
 
 	public int GetFriendsListRemainingCalls(Twitter twitter) throws TwitterException
 	{
-		return GetRemainingCalls(FRIENDS_LIST_ROUTE, twitter);
+		return GetRemainingCalls(this.FRIENDS_LIST_ROUTE, twitter);
 	}
 
 	public int GetUserTimeLineRemainingCalls(Twitter twitter) throws TwitterException
 	{
-		return GetRemainingCalls(USER_TIMELINE_ROUTE, twitter);
+		return GetRemainingCalls(this.USER_TIMELINE_ROUTE, twitter);
 	}
 }

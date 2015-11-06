@@ -1,15 +1,10 @@
 package edu.rosehulman.csse490.storm;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-import backtype.storm.task.TopologyContext;
-import backtype.storm.topology.BasicOutputCollector;
-import backtype.storm.topology.IBasicBolt;
-import backtype.storm.topology.OutputFieldsDeclarer;
-import backtype.storm.tuple.Fields;
-import backtype.storm.tuple.Tuple;
-import backtype.storm.tuple.Values;
+import backtype.storm.task.*;
+import backtype.storm.topology.*;
+import backtype.storm.tuple.*;
 
 public class WordCountBolt implements IBasicBolt
 {
@@ -37,14 +32,16 @@ public class WordCountBolt implements IBasicBolt
 	{
 		String word = (String) input.getValueByField("word");
 		String keyword = (String) input.getValueByField("keyword");
-		
-		Integer count = countMap.get(word);
+
+		Integer count = this.countMap.get(word);
 		if (count == null)
+		{
 			count = 0;
+		}
 		count++;
 
-		countMap.put(word, count);
-		
+		this.countMap.put(word, count);
+
 		collector.emit(new Values(keyword, word, count));
 	}
 

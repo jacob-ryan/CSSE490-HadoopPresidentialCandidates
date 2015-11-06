@@ -1,15 +1,9 @@
 package edu.rosehulman.csse490.dataImport;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
-import twitter4j.Status;
-import twitter4j.User;
+import twitter4j.*;
 
 public class TwitterWriter
 {
@@ -24,9 +18,8 @@ public class TwitterWriter
 	}
 
 	/**
-	 * Writes a list of tweets to given output path. This does not
-	 * write duplicate tweets based on their ID of the given list.
-	 * 
+	 * Writes a list of tweets to given output path. This does not write duplicate tweets based on their ID of the given list.
+	 *
 	 * @param tweets
 	 * @throws IOException
 	 */
@@ -60,7 +53,7 @@ public class TwitterWriter
 
 	/**
 	 * Writes the list of user's id, screenname, name, and account created date.
-	 * 
+	 *
 	 * @param users
 	 * @throws IOException
 	 */
@@ -82,11 +75,12 @@ public class TwitterWriter
 		String tweetText = status.getText().replace("\n", " ");
 		int recount = status.getRetweetCount();
 
-		return username + DELIMETER + tweetText + DELIMETER + recount + "\n";
+		return username + TwitterWriter.DELIMETER + tweetText + TwitterWriter.DELIMETER + recount + "\n";
 	}
 
 	private String formatUser(User user)
 	{
-		return user.getId() + DELIMETER + user.getScreenName() + DELIMETER + user.getName() + DELIMETER + user.getCreatedAt().toString() + "\n";
+		return user.getId() + TwitterWriter.DELIMETER + user.getScreenName() + TwitterWriter.DELIMETER + user.getName() + TwitterWriter.DELIMETER
+				+ user.getCreatedAt().toString() + "\n";
 	}
 }

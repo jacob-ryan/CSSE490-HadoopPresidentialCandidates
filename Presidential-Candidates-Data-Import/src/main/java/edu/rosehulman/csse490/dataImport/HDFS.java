@@ -1,6 +1,6 @@
 package edu.rosehulman.csse490.dataImport;
 
-import java.io.IOException;
+import java.io.*;
 
 public class HDFS
 {

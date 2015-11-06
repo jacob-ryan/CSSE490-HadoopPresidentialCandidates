@@ -1,57 +1,68 @@
 package edu.rosehulman.csse490.storm;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
+import java.util.Map.Entry;
 
-import backtype.storm.task.TopologyContext;
-import backtype.storm.topology.BasicOutputCollector;
-import backtype.storm.topology.IBasicBolt;
-import backtype.storm.topology.OutputFieldsDeclarer;
-import backtype.storm.tuple.Tuple;
+import backtype.storm.task.*;
+import backtype.storm.topology.*;
+import backtype.storm.tuple.*;
 
-public class WriteCountBolt implements IBasicBolt {
+public class WriteCountBolt implements IBasicBolt
+{
+	private static final String filePath = "/tmp/Tweets/";
 
 	private int wordBuffer = 0;
-	private HashMap<String, Integer> countMap = new HashMap<String, Integer>();
-	private String filePath = "tmp/Tweets/";
+	private Map<String, Integer> countMap = new HashMap<String, Integer>();
 
 	@Override
-	public void declareOutputFields(OutputFieldsDeclarer arg0) {
-		// none for now
+	public void declareOutputFields(OutputFieldsDeclarer declarer)
+	{
+		// No output fields, because nothing is emitted.
 	}
 
 	@Override
-	public Map<String, Object> getComponentConfiguration() {
+	public Map<String, Object> getComponentConfiguration()
+	{
 		return null;
 	}
 
 	@Override
-	public void cleanup() {
-		// TODO Auto-generated method stub
-		
+	public void cleanup()
+	{
 	}
 
 	@Override
-	public void execute(Tuple input, BasicOutputCollector collector) {
+	public void execute(Tuple input, BasicOutputCollector collector)
+	{
 		String keyword = (String) input.getValueByField("keyword");
 		String word = (String) input.getValueByField("word");
 		int count = (Integer) input.getValueByField("count");
-		
-		countMap.put(word, count);
-		
-		if (++wordBuffer > 100) {
-			wordBuffer = 0;
-			
-			System.out.println("Writing tweet count map...");
+
+		this.countMap.put(word, count);
+		this.wordBuffer += 1;
+
+		if (this.wordBuffer >= 100)
+		{
+			this.wordBuffer = 0;
+
+			System.out.println("[WriteCountBolt] Writing tweet count map...");
 			try
 			{
-				FileWriter writer = new FileWriter(new File(this.filePath + keyword + ".txt"), true);
-				
-				for (String key : countMap.keySet()) {
-					writer.write(key + ": " + countMap.get(key) + "\n");
+				FileWriter writer = new FileWriter(new File(WriteCountBolt.filePath + keyword + ".txt"));
+
+				List<Map.Entry<String, Integer>> sortedWords = new ArrayList<Map.Entry<String, Integer>>(this.countMap.entrySet());
+				Collections.sort(sortedWords, new Comparator<Map.Entry<String, Integer>>()
+						{
+					@Override
+					public int compare(Entry<String, Integer> a, Entry<String, Integer> b)
+					{
+						return a.getValue().compareTo(b.getValue());
+					}
+						});
+				for (Map.Entry<String, Integer> entry : sortedWords)
+				{
+					writer.write(entry.getKey() + "\t" + entry.getValue() + "\n");
 				}
 				writer.close();
 			}
@@ -62,9 +73,9 @@ public class WriteCountBolt implements IBasicBolt {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	public void prepare(Map arg0, TopologyContext arg1) {
-		//wordBuffer = 0;
+	public void prepare(Map map, TopologyContext context)
+	{
 	}
-
 }

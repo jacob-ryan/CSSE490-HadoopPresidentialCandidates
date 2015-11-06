@@ -1,7 +1,6 @@
 package edu.rosehulman.csse490.dataImport;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 public class Politicians
 {
@@ -10,176 +9,174 @@ public class Politicians
 
 	public Politicians()
 	{
-		Initialize();
-	}
+		this.republicans = new HashMap<String, ArrayList<String>>();
+		this.democrats = new HashMap<String, ArrayList<String>>();
 
-	private void Initialize()
-	{
-		republicans = new HashMap<String, ArrayList<String>>();
-		democrats = new HashMap<String, ArrayList<String>>();
-
-		republicans.put("Jeb Bush", new ArrayList<String>()
-		{
+		this.republicans.put("Jeb Bush", new ArrayList<String>()
+				{
 			{
 				add("JebBush");
 			}
-		});
-		republicans.put("Ben Carson", new ArrayList<String>()
-		{
+				});
+		this.republicans.put("Ben Carson", new ArrayList<String>()
+				{
 			{
 				add("RealBenCarson");
 			}
-		});
-		republicans.put("Chris Christie", new ArrayList<String>()
-		{
+				});
+		this.republicans.put("Chris Christie", new ArrayList<String>()
+				{
 			{
 				add("ChrisChristie");
 				add("GovChristie");
 			}
-		});
-		republicans.put("Ted Cruz", new ArrayList<String>()
-		{
+				});
+		this.republicans.put("Ted Cruz", new ArrayList<String>()
+				{
 			{
 				add("tedcruz");
 			}
-		});
-		republicans.put("Carly Fiorina", new ArrayList<String>()
-		{
+				});
+		this.republicans.put("Carly Fiorina", new ArrayList<String>()
+				{
 			{
 				add("CarlyFiorina");
 			}
-		});
-		republicans.put("Jim Gilmore", new ArrayList<String>()
-		{
+				});
+		this.republicans.put("Jim Gilmore", new ArrayList<String>()
+				{
 			{
 				add("gov_gilmore");
 			}
-		});
-		republicans.put("Lindey Graham", new ArrayList<String>()
-		{
+				});
+		this.republicans.put("Lindey Graham", new ArrayList<String>()
+				{
 			{
 				add("LindseyGrahamSC");
 			}
-		});
-		republicans.put("Mike Huckabee", new ArrayList<String>()
-		{
+				});
+		this.republicans.put("Mike Huckabee", new ArrayList<String>()
+				{
 			{
 				add("GovMikeHuckabee");
 			}
-		});
-		republicans.put("Bobby Jindal", new ArrayList<String>()
-		{
+				});
+		this.republicans.put("Bobby Jindal", new ArrayList<String>()
+				{
 			{
-				//add("Jindalin2016");
+				// add("Jindalin2016");
 				add("BobbyJindal");
 			}
-		});
-		republicans.put("John Kasich", new ArrayList<String>()
-		{
+				});
+		this.republicans.put("John Kasich", new ArrayList<String>()
+				{
 			{
 				add("JohnKasich");
 			}
-		});
-		republicans.put("George Pataki", new ArrayList<String>()
-		{
+				});
+		this.republicans.put("George Pataki", new ArrayList<String>()
+				{
 			{
 				add("GovernorPataki");
 				add("Gpataki2016");
 			}
-		});
-		republicans.put("Rand Paul", new ArrayList<String>()
-		{
+				});
+		this.republicans.put("Rand Paul", new ArrayList<String>()
+				{
 			{
 				add("RandPaul");
 				add("Rand2016");
 			}
-		});
-		republicans.put("Marco Rubio", new ArrayList<String>()
-		{
+				});
+		this.republicans.put("Marco Rubio", new ArrayList<String>()
+				{
 			{
 				add("marcorubio");
 			}
-		});
-		republicans.put("Rick Santorum", new ArrayList<String>()
-		{
+				});
+		this.republicans.put("Rick Santorum", new ArrayList<String>()
+				{
 			{
 				add("RickSantorum");
 			}
-		});
-		republicans.put("Donald Trump", new ArrayList<String>()
-		{
+				});
+		this.republicans.put("Donald Trump", new ArrayList<String>()
+				{
 			{
 				add("realDonaldTrump");
 			}
-		});
+				});
 
-		democrats.put("Lincoln Chafee", new ArrayList<String>()
-		{
+		this.democrats.put("Lincoln Chafee", new ArrayList<String>()
+				{
 			{
 				add("LincolnChafee");
 			}
-		});
-		democrats.put("Hillary Clinton", new ArrayList<String>()
-		{
+				});
+		this.democrats.put("Hillary Clinton", new ArrayList<String>()
+				{
 			{
 				add("HillaryClinton");
 				add("HillaryIn2016");
 			}
-		});
-		democrats.put("Lawrence Lessig", new ArrayList<String>()
-		{
+				});
+		this.democrats.put("Lawrence Lessig", new ArrayList<String>()
+				{
 			{
 				add("lessig");
 				add("Lessig2016");
 			}
-		});
-		democrats.put("Martin O'Malley", new ArrayList<String>()
-		{
+				});
+		this.democrats.put("Martin O'Malley", new ArrayList<String>()
+				{
 			{
 				add("MartinOMalley");
 			}
-		});
-		democrats.put("Bernie Sanders", new ArrayList<String>()
-		{
+				});
+		this.democrats.put("Bernie Sanders", new ArrayList<String>()
+				{
 			{
 				add("BernieSanders");
 			}
-		});
-		democrats.put("Jim Webb", new ArrayList<String>()
-		{
+				});
+		this.democrats.put("Jim Webb", new ArrayList<String>()
+				{
 			{
 				add("JimWebbUSA");
 			}
-		});
+				});
 	}
 
 	/**
 	 * Returns all of the politicians currently in the presidential election
-	 * 
+	 *
 	 * @return HashMap<String:Name, ArrayList<String>:TwitterUsername
 	 */
 	public HashMap<String, ArrayList<String>> GetAllPoliticians()
 	{
 		HashMap<String, ArrayList<String>> map = new HashMap<String, ArrayList<String>>();
-		for (String nom : republicans.keySet())
-		{
-			map.put(nom, republicans.get(nom));
-		}
-		for (String nom : democrats.keySet())
-		{
-			map.put(nom, democrats.get(nom));
-		}
-
+		map.putAll(this.democrats);
+		map.putAll(this.republicans);
 		return map;
+	}
+	
+	public ArrayList<String> GetAllHandles()
+	{
+		ArrayList<String> results = new ArrayList<String>();
+		for (ArrayList<String> handles : GetAllPoliticians().values())
+		{
+			results.addAll(handles);
+		}
+		return results;
 	}
 
 	public HashMap<String, ArrayList<String>> GetRepublicans()
 	{
-		return republicans;
+		return this.republicans;
 	}
 
 	public HashMap<String, ArrayList<String>> GetDemocrats()
 	{
-		return democrats;
+		return this.democrats;
 	}
 }

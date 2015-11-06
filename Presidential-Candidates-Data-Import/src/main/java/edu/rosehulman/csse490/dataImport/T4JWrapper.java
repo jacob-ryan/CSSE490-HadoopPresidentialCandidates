@@ -1,22 +1,10 @@
 package edu.rosehulman.csse490.dataImport;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import twitter4j.GeoLocation;
-import twitter4j.Location;
-import twitter4j.PagableResponseList;
-import twitter4j.Paging;
-import twitter4j.Query;
-import twitter4j.QueryResult;
-import twitter4j.ResponseList;
-import twitter4j.Status;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
-import twitter4j.User;
-import twitter4j.api.TrendsResources;
-import twitter4j.conf.ConfigurationBuilder;
+import twitter4j.*;
+import twitter4j.api.*;
+import twitter4j.conf.*;
 
 public class T4JWrapper
 {
@@ -28,15 +16,15 @@ public class T4JWrapper
 		ConfigReader config = new ConfigReader();
 
 		cb.setDebugEnabled(true).setOAuthConsumerKey(config.getConsumerKey()).setOAuthConsumerSecret(config.getConsumerSecret())
-				.setOAuthAccessToken(config.getAccessToken()).setOAuthAccessTokenSecret(config.getAccessTokenSecret());
+		.setOAuthAccessToken(config.getAccessToken()).setOAuthAccessTokenSecret(config.getAccessTokenSecret());
 
 		TwitterFactory tf = new TwitterFactory(cb.build());
-		twitter = tf.getInstance();
+		this.twitter = tf.getInstance();
 	}
 
 	/**
 	 * Get a list of following users for the given user ID MAX 200 followers per call
-	 * 
+	 *
 	 * @param userID
 	 * @param amountOfFollowers
 	 * @return
@@ -54,12 +42,12 @@ public class T4JWrapper
 		{
 			if (remainingFollowers < 200)
 			{
-				followersList = twitter.getFollowersList(userID, cursor, (int) remainingFollowers);
+				followersList = this.twitter.getFollowersList(userID, cursor, (int) remainingFollowers);
 				remainingFollowers = 0;
 			}
 			else
 			{
-				followersList = twitter.getFollowersList(userID, cursor, 200);
+				followersList = this.twitter.getFollowersList(userID, cursor, 200);
 				remainingFollowers -= 200;
 			}
 
@@ -76,7 +64,7 @@ public class T4JWrapper
 
 	/**
 	 * Get a list of the friend users for the given user ID MAX 200 friends per call
-	 * 
+	 *
 	 * @param userID
 	 * @param amountOfFriends
 	 * @return
@@ -94,12 +82,12 @@ public class T4JWrapper
 		{
 			if (remainingFriends > 200)
 			{
-				friendsList = twitter.getFriendsList(userID, cursor, (int) remainingFriends);
+				friendsList = this.twitter.getFriendsList(userID, cursor, (int) remainingFriends);
 				remainingFriends = 0;
 			}
 			else
 			{
-				friendsList = twitter.getFriendsList(userID, cursor, (int) remainingFriends);
+				friendsList = this.twitter.getFriendsList(userID, cursor, (int) remainingFriends);
 				remainingFriends -= 200;
 			}
 
@@ -117,7 +105,7 @@ public class T4JWrapper
 
 	/**
 	 * Gets relevant tweets given for the search term MAX 100 tweets per call
-	 * 
+	 *
 	 * @param searchTerm
 	 * @param amountOfTweets
 	 * @return
@@ -128,11 +116,11 @@ public class T4JWrapper
 		long lastID = Long.MAX_VALUE;
 		Query query = new Query(searchTerm);
 		int previousSize = -1;
-		
+
 		while (tweets.size() < amountOfTweets && tweets.size() != previousSize)
 		{
 			previousSize = tweets.size();
-			
+
 			if (amountOfTweets - tweets.size() > 100)
 			{
 				query.setCount(100);
@@ -144,12 +132,14 @@ public class T4JWrapper
 
 			try
 			{
-				QueryResult result = twitter.search(query);
+				QueryResult result = this.twitter.search(query);
 				tweets.addAll(result.getTweets());
 				for (Status t : tweets)
 				{
 					if (t.getId() < lastID)
+					{
 						lastID = t.getId();
+					}
 				}
 			}
 			catch (TwitterException te)
@@ -164,7 +154,7 @@ public class T4JWrapper
 
 	/**
 	 * Gets the most recent tweets for the given screenname MAX 200 tweets per call
-	 * 
+	 *
 	 * @param userScreenName
 	 * @param amountOfTweets
 	 * @return
@@ -180,7 +170,7 @@ public class T4JWrapper
 		do
 		{
 			pages = new Paging(page++, 200);
-			List<Status> tweets = twitter.getUserTimeline(userScreenName, pages);
+			List<Status> tweets = this.twitter.getUserTimeline(userScreenName, pages);
 
 			for (Status tweet : tweets)
 			{
@@ -199,7 +189,7 @@ public class T4JWrapper
 
 	/**
 	 * Gets the most recent tweets for the given user MAX 200 tweets per call
-	 * 
+	 *
 	 * @param userID
 	 * @param amountOfTweets
 	 * @return
@@ -215,7 +205,7 @@ public class T4JWrapper
 		do
 		{
 			pages = new Paging(page++, 200);
-			List<Status> tweets = twitter.getUserTimeline(userID, pages);
+			List<Status> tweets = this.twitter.getUserTimeline(userID, pages);
 
 			for (Status tweet : tweets)
 			{
@@ -235,7 +225,7 @@ public class T4JWrapper
 	public int getTrendingByLocation(double latitude, double longitude) throws TwitterException
 	{
 		GeoLocation geo = new GeoLocation(latitude, longitude);
-		TrendsResources trends = twitter.trends();
+		TrendsResources trends = this.twitter.trends();
 		ResponseList<Location> closeTrends = trends.getClosestTrends(geo);
 
 		for (Location trend : closeTrends)
@@ -247,17 +237,17 @@ public class T4JWrapper
 
 	/**
 	 * Returns the twitter object. Used to get authorized twitter user's ID.
-	 * 
+	 *
 	 * @return
 	 */
 	public Twitter getTwitterObject()
 	{
-		return twitter;
+		return this.twitter;
 	}
 
 	/**
 	 * Deprecated shouldn't use this right now. Quick and dirty way to print tweets if necessary.
-	 * 
+	 *
 	 * @param tweets
 	 */
 	@Deprecated
