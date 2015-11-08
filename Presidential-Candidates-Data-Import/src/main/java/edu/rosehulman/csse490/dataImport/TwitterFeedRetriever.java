@@ -17,7 +17,6 @@ public class TwitterFeedRetriever
 		TwitterFeedRetriever tweets = new TwitterFeedRetriever();
 
 		tweets.WriteAllPoliticianSearchTweets(600);
-		tweets.limits.printSearchCallsUsage(tweets.twitter.getTwitterObject());
 		tweets.GetAllPoliticianTimelineTweets(200);
 	}
 
@@ -40,7 +39,7 @@ public class TwitterFeedRetriever
 				TwitterWriter writer = new TwitterWriter(localOutput);
 
 				int callsRemaining = this.limits.GetSearchTweetsRemainingCalls(this.twitter.getTwitterObject());
-				System.out.println("API calls remaining: " + callsRemaining);
+				System.out.println("API search calls remaining: " + callsRemaining);
 
 				if (callsRemaining >= tweetsPerCandidate / 100)
 				{
@@ -48,13 +47,11 @@ public class TwitterFeedRetriever
 
 					ArrayList<Status> tweets = this.twitter.searchAndReturnTweets("@" + username, tweetsPerCandidate);
 					writer.writeTweets(tweets);
-
+					writer.Close();
 					//String dateString = new SimpleDateFormat("yyyy-MM-dd-HH:mm").format(new Date());
 					String hdfsOutput = "/tmp/TweetData/";
 					HDFS.uploadToHDFS(localOutput, hdfsOutput);
 				}
-				
-				writer.Close();
 			}
 		}
 
@@ -74,7 +71,7 @@ public class TwitterFeedRetriever
 			for (String username : politicianMap.get(key))
 			{
 				int callsRemaining = this.limits.GetUserTimeLineRemainingCalls(this.twitter.getTwitterObject());
-				System.out.println("API calls remaining: " + callsRemaining);
+				System.out.println("API user timeline calls remaining: " + callsRemaining);
 
 				if (callsRemaining >= tweetsPerCandidate / 200)
 				{
@@ -83,10 +80,9 @@ public class TwitterFeedRetriever
 					ArrayList<Status> tweets = this.twitter.getUserTimeline("@" + username, tweetsPerCandidate);
 					writer.writeRetweets(tweets, username);
 				}
-				
-				writer.Close();
 			}
 		}
+		writer.Close();
 
 		System.out.println("Ending API calls remaining:");
 		this.limits.printGetUserTimelineUsage(this.twitter.getTwitterObject());
