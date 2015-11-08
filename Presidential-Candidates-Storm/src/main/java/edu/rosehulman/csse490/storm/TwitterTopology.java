@@ -2,12 +2,14 @@ package edu.rosehulman.csse490.storm;
 
 import java.util.*;
 
-import storm.starter.spout.*;
-import backtype.storm.*;
-import backtype.storm.generated.*;
-import backtype.storm.topology.*;
-import backtype.storm.tuple.*;
-import backtype.storm.utils.*;
+import storm.starter.spout.TwitterSampleSpout;
+import backtype.storm.Config;
+import backtype.storm.LocalCluster;
+import backtype.storm.StormSubmitter;
+import backtype.storm.generated.AlreadyAliveException;
+import backtype.storm.generated.InvalidTopologyException;
+import backtype.storm.topology.TopologyBuilder;
+import backtype.storm.utils.Utils;
 import edu.rosehulman.csse490.dataImport.*;
 
 public class TwitterTopology
@@ -31,10 +33,10 @@ public class TwitterTopology
 				new TwitterSampleSpout(config.getConsumerKey(), config.getConsumerSecret(), config.getAccessToken(), config.getAccessTokenSecret(),
 						keyWords));
 
-		builder.setBolt("keywordFinder", new KeywordFinderBolt()).shuffleGrouping("twitter");
-		builder.setBolt("count", new WordCountBolt()).fieldsGrouping("keywordFinder", new Fields("keyword"));
-		builder.setBolt("writeCount", new WriteCountBolt()).fieldsGrouping("count", new Fields("keyword"));
-		builder.setBolt("writeTweet", new WriteTweetBolt()).fieldsGrouping("keywordFinder", new Fields("keyword"));
+//		builder.setBolt("keywordFinder", new KeywordFinderBolt()).shuffleGrouping("twitter");
+//		builder.setBolt("count", new WordCountBolt()).fieldsGrouping("keywordFinder", new Fields("keyword"));
+//		builder.setBolt("writeCount", new WriteCountBolt()).fieldsGrouping("count", new Fields("keyword"));
+//		builder.setBolt("writeTweet", new WriteTweetBolt()).fieldsGrouping("keywordFinder", new Fields("keyword"));
 
 		Config configS = new Config();
 		configS.setDebug(false);

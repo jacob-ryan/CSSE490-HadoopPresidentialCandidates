@@ -16,6 +16,10 @@ public class TwitterWriter
 		this.outputPath = outputPath;
 		this.writer = new BufferedWriter(new FileWriter(this.outputPath, true));
 	}
+	
+	public void Close() throws IOException {
+		this.writer.close();
+	}
 
 	/**
 	 * Writes a list of tweets to given output path. This does not write duplicate tweets based on their ID of the given list.
