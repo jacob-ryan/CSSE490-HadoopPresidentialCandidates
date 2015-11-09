@@ -10,7 +10,7 @@ import backtype.storm.tuple.*;
 
 public class WriteCountBolt implements IBasicBolt
 {
-	private static final String filePath = "/tmp/Tweets/";
+	private static final String filePath = "./StormTweets/";
 
 	private int wordBuffer = 0;
 	private Map<String, Integer> countMap = new HashMap<String, Integer>();

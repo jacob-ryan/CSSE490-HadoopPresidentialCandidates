@@ -25,7 +25,7 @@ public class StormExport implements TimerListener
 			{
 				System.out.println("[StormExport] Exporting Storm data for Twitter handle: " + handle + "...");
 				new ProcessRunner("cp",
-						"/tmp/Tweets/" + handle + ".txt",
+						"/tmp/Presidential Candidates/StormWordCount/" + handle + ".txt",
 						"/var/www/html/Storm/" + handle + ".txt");
 				System.out.println("[StormExport] -----------------------------------------------------------");
 			}

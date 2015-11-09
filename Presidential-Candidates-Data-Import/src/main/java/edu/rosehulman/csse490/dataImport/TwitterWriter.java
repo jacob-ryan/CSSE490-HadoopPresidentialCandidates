@@ -16,8 +16,9 @@ public class TwitterWriter
 		this.outputPath = outputPath;
 		this.writer = new BufferedWriter(new FileWriter(this.outputPath, true));
 	}
-	
-	public void Close() throws IOException {
+
+	public void close() throws IOException
+	{
 		this.writer.close();
 	}
 

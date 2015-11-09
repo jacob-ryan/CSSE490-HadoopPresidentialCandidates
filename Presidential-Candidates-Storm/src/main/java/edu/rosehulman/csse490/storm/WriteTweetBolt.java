@@ -10,7 +10,7 @@ import backtype.storm.tuple.*;
 public class WriteTweetBolt implements IBasicBolt
 {
 	private int tweetBuffer = 0;
-	private String filePath = "tmp/StormTweets/";
+	private String filePath = "./StormTweets/";
 	private ArrayList<String> tweets = new ArrayList<String>();
 	private HashSet<Long> idSet = new HashSet<Long>();
 

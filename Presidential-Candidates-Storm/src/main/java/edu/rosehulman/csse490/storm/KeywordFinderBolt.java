@@ -6,7 +6,6 @@ import twitter4j.*;
 import backtype.storm.task.*;
 import backtype.storm.topology.*;
 import backtype.storm.tuple.*;
-import edu.rosehulman.csse490.dataImport.*;
 
 public class KeywordFinderBolt implements IBasicBolt
 {

@@ -47,9 +47,9 @@ public class TwitterFeedRetriever
 
 					ArrayList<Status> tweets = this.twitter.searchAndReturnTweets("@" + username, tweetsPerCandidate);
 					writer.writeTweets(tweets);
-					writer.Close();
-					//String dateString = new SimpleDateFormat("yyyy-MM-dd-HH:mm").format(new Date());
-					String hdfsOutput = "/tmp/TweetData/";
+					writer.close();
+					String dateString = new SimpleDateFormat("yyyy-MM-dd_HH-mm").format(new Date());
+					String hdfsOutput = "/tmp/TweetData/" + username + "/static-" + dateString + ".txt";
 					HDFS.uploadToHDFS(localOutput, hdfsOutput);
 				}
 			}
@@ -82,7 +82,7 @@ public class TwitterFeedRetriever
 				}
 			}
 		}
-		writer.Close();
+		writer.close();
 
 		System.out.println("Ending API calls remaining:");
 		this.limits.printGetUserTimelineUsage(this.twitter.getTwitterObject());

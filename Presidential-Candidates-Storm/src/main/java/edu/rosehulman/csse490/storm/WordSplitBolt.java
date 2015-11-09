@@ -10,7 +10,6 @@ import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
-import edu.rosehulman.csse490.dataImport.*;
 
 public class WordSplitBolt implements IBasicBolt
 {
