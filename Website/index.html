@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Presidential Candidates</title>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//cdn.datatables.net/1.9.4/css/jquery.dataTables.css">
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<script src="//cdn.datatables.net/1.9.4/js/jquery.dataTables.min.js"></script>
+	<script src="index.js"></script>
+
+	<style>
+		.dataTables_length
+		{
+			width: 50%;
+		}
+		.dataTables_length > label
+		{
+			width: 100%
+		}
+		.dataTables_length > label > select
+		{
+			display: inline-block;
+			width: 100px;
+		}
+		table
+		{
+			border: 1px solid gray;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<h1>Presidential Candidates Data Analysis with Hadoop</h1>
+		<h3>Created by Jacob Ryan, Nithin Perumal, and Collin Trowbridge</h3>
+		<h3>CSSE 490 - Intro to the Hadoop Ecosystem</h3>
+		<div class="row">
+			<hr>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<p>Use the dropdowns below to select a presidential candidate, then the kind of analysis data to view.</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-2 text-right">
+				<label>Candidate</label>
+			</div>
+			<div class="col-md-3">
+				<select class="form-control" id="candidate">
+					<option value="JebBush">Jeb Bush</option>
+					<option value="RealBenCarson">Ben Carson</option>
+					<option value="tedcruz">Ted Cruz</option>
+					<option value="CarlyFiorina">Carly Fiorina</option>
+					<option value="JohnKasich">John Kasich</option>
+					<option value="RandPaul">Rand Paul</option>
+
+					<option value="realDonaldTrump">Donald Trump</option>
+				</select>
+			</div>
+			<div class="col-md-2 text-right">
+				<label>Analysis Type</label>
+			</div>
+			<div class="col-md-3">
+				<select class="form-control" id="type">
+					<option value="n-gram">N-Gram of Tweets</option>
+					<option value="retweet">Retweet Aggregation</option>
+					<option value="storm">Live Storm Count</option>
+				</select>
+			</div>
+			<div class="col-md-2">
+				<button class="btn btn-block btn-primary" id="update">Update</button>
+			</div>
+		</div>
+		<div class="row">
+			<hr>
+		</div>
+		<div class="col-md-12" id="results"></div>
+	</div>
+</body>
+</html>
