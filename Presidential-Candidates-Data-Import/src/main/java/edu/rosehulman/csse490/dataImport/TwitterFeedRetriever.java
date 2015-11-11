@@ -8,16 +8,17 @@ import twitter4j.*;
 
 public class TwitterFeedRetriever
 {
-	private T4JWrapper twitter;
+	protected T4JWrapper twitter;
 	private TwitterRateLimitViewer limits;
 	private Politicians candidates;
+	protected int tweetsPerCandidate;
 
 	public static void main(String[] args) throws TwitterException, IOException, InterruptedException
 	{
 		TwitterFeedRetriever tweets = new TwitterFeedRetriever();
 		
-		tweets.WriteAllPoliticianSearchTweets(1000);
-		tweets.GetAllPoliticianTimelineTweets(1000);
+		tweets.WriteAllPoliticianSearchTweets();
+		tweets.GetAllPoliticianTimelineTweets();
 	}
 
 	public TwitterFeedRetriever() throws TwitterException
@@ -25,9 +26,10 @@ public class TwitterFeedRetriever
 		this.twitter = new T4JWrapper();
 		this.limits = new TwitterRateLimitViewer();
 		this.candidates = new Politicians();
+		this.tweetsPerCandidate = 100;
 	}
 
-	public void WriteAllPoliticianSearchTweets(int tweetsPerCandidate) throws TwitterException, IOException, InterruptedException
+	public void WriteAllPoliticianSearchTweets() throws TwitterException, IOException, InterruptedException
 	{
 		HashMap<String, ArrayList<String>> politicianMap = this.candidates.GetAllPoliticians();
 
@@ -45,13 +47,7 @@ public class TwitterFeedRetriever
 				if (callsRemaining >= tweetsPerCandidate / 100)
 				{
 					System.out.println("Getting tweets for: " + username);
-
-					ArrayList<Status> tweets = this.twitter.searchAndReturnTweets("@" + username, tweetsPerCandidate);
-					writer.writeTweets(tweets);
-					writer.close();
-					
-					String hdfsPath = "/tmp/TweetData/" + username;
-					HDFS.uploadToHDFS(localOutput, hdfsPath);
+					new Launcher(username, writer, localOutput);
 				}
 			}
 		}
@@ -60,7 +56,7 @@ public class TwitterFeedRetriever
 		this.limits.printSearchCallsUsage(this.twitter.getTwitterObject());
 	}
 
-	public void GetAllPoliticianTimelineTweets(int tweetsPerCandidate) throws TwitterException, IOException, InterruptedException
+	public void GetAllPoliticianTimelineTweets() throws TwitterException, IOException, InterruptedException
 	{
 		HashMap<String, ArrayList<String>> politicianMap = this.candidates.GetAllPoliticians();
 		
@@ -75,11 +71,11 @@ public class TwitterFeedRetriever
 				int callsRemaining = this.limits.GetUserTimeLineRemainingCalls(this.twitter.getTwitterObject());
 				System.out.println("API user timeline calls remaining: " + callsRemaining);
 
-				if (callsRemaining >= tweetsPerCandidate / 200)
+				if (callsRemaining >= this.tweetsPerCandidate / 200)
 				{
 					System.out.println("Getting retweets for: " + username);
-
-					ArrayList<Status> tweets = this.twitter.getUserTimeline("@" + username, tweetsPerCandidate);
+					
+					ArrayList<Status> tweets = this.twitter.getUserTimeline("@" + username, this.tweetsPerCandidate);
 					writer.writeRetweets(tweets, username);
 				}
 			}
@@ -89,7 +85,40 @@ public class TwitterFeedRetriever
 		System.out.println("Ending API calls remaining:");
 		this.limits.printGetUserTimelineUsage(this.twitter.getTwitterObject());
 
-		String hdfsOutput = "/tmp/RetweetData/retweets.txt";
+		String hdfsOutput = "/tmp/RetweetData";
 		HDFS.uploadToHDFS(localOutput, hdfsOutput);
+	}
+	
+	private class Launcher extends Thread
+	{
+		private String candidateName;
+		private TwitterWriter writer;
+		private String localOutput;
+		
+		public Launcher(String candidateName, TwitterWriter writer, String localOutput)
+		{
+			this.writer = writer;
+			this.candidateName = candidateName;
+			this.localOutput = localOutput;
+			start();
+		}
+		
+		@Override
+		public void run()
+		{
+			try
+			{
+				ArrayList<Status> tweets = TwitterFeedRetriever.this.twitter.searchAndReturnTweets("@" + candidateName, TwitterFeedRetriever.this.tweetsPerCandidate);
+				writer.writeTweets(tweets);
+				writer.close();
+				
+				String hdfsPath = "/tmp/TweetData/" + candidateName;
+				HDFS.uploadToHDFS(this.localOutput, hdfsPath);
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 }
