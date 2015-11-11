@@ -13,9 +13,8 @@ public class Main
 		this.args = args;
 		
 		System.out.println("Presidential Candidates MapReduce application has started.");
-		List<String> candidateNames = new ArrayList<String>();
-		candidateNames.add("realDonaldTrump");
-		//candidateNames.add("testData");
+		Politicians candidates = new Politicians();
+		List<String> candidateNames = candidates.GetAllHandles();
 		
 		for (String candidateName : candidateNames)
 		{

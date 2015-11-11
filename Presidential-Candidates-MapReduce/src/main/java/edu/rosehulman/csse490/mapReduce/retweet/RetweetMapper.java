@@ -13,6 +13,8 @@ public class RetweetMapper extends Mapper<LongWritable, Text, Text, IntWritable>
 	@Override
 	public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 		String[] tokens = value.toString().split("\t");
+		if (tokens.length < 3) return;
+		
 		Text name = new Text(tokens[0]);
 		int retweetCount = Integer.parseInt(tokens[2]);
 		
