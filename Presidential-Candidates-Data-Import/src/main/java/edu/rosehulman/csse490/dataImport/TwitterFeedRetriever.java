@@ -63,8 +63,9 @@ public class TwitterFeedRetriever
 	public void GetAllPoliticianTimelineTweets(int tweetsPerCandidate) throws TwitterException, IOException, InterruptedException
 	{
 		HashMap<String, ArrayList<String>> politicianMap = this.candidates.GetAllPoliticians();
-
-		String localOutput = "./RetweetData/retweets.txt";
+		
+		String dateString = new SimpleDateFormat("yyyy-MM-dd_HH-mm").format(new Date());
+		String localOutput = "./RetweetData/retweets-" + dateString + ".txt";
 		TwitterWriter writer = new TwitterWriter(localOutput);
 
 		for (String key : politicianMap.keySet())
