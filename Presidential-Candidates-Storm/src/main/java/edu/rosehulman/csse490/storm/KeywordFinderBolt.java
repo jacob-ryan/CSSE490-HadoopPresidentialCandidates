@@ -14,7 +14,7 @@ public class KeywordFinderBolt implements IBasicBolt
 	@Override
 	public void declareOutputFields(OutputFieldsDeclarer declarer)
 	{
-		declarer.declare(new Fields("keyword", "word", "text", "id"));
+		declarer.declare(new Fields("keyword", "text"));
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class KeywordFinderBolt implements IBasicBolt
 	{
 		Status tweet = (Status) input.getValueByField("tweet");
 		String text = tweet.getText().replaceAll("\\p{Punct}", "").toLowerCase();
-		long id = tweet.getId();
+
 		String[] words = text.split(" ");
 		String keyword = "NONAME";
 		boolean flag = false;
@@ -44,7 +44,7 @@ public class KeywordFinderBolt implements IBasicBolt
 			{
 				if (word.toLowerCase().equals(this.candidates.get(j).toLowerCase()))
 				{
-					keyword = word;
+					keyword = this.candidates.get(j);
 					flag = true;
 					break;
 				}
@@ -54,11 +54,8 @@ public class KeywordFinderBolt implements IBasicBolt
 				break;
 			}
 		}
-
-		for (String word : words)
-		{
-			collector.emit(new Values(keyword, word, text, id));
-		}
+		
+		collector.emit(new Values(keyword, text));
 	}
 
 	@SuppressWarnings("rawtypes")

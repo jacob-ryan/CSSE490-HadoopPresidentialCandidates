@@ -17,8 +17,6 @@ import backtype.storm.tuple.*;
 
 public class WriteCountBolt implements IBasicBolt
 {
-	private static final String filePath = "~/StormWordCount/";
-
 	private int wordBuffer = 0;
 	private Map<String, Integer> countMap = new HashMap<String, Integer>();
 	private String hdfsUri = "hdfs://hadoop-02.csse.rose-hulman.edu:8020";
@@ -58,8 +56,6 @@ public class WriteCountBolt implements IBasicBolt
 			System.out.println("[WriteCountBolt] Writing tweet count map for " + keyword + "...");
 			try
 			{
-//				FileWriter writer = new FileWriter(new File(WriteCountBolt.filePath + keyword + ".txt"));
-				
 				List<Map.Entry<String, Integer>> sortedWords = new ArrayList<Map.Entry<String, Integer>>(this.countMap.entrySet());
 				Collections.sort(sortedWords, new Comparator<Map.Entry<String, Integer>>()
 						{

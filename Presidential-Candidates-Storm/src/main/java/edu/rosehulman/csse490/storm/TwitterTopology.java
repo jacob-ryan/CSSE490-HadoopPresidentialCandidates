@@ -32,11 +32,13 @@ public class TwitterTopology
 		builder.setSpout("twitter",
 				new TwitterSampleSpout(config.getConsumerKey(), config.getConsumerSecret(), config.getAccessToken(), config.getAccessTokenSecret(),
 						keyWords));
-
-		builder.setBolt("keywordFinder", new KeywordFinderBolt()).shuffleGrouping("twitter");
-		builder.setBolt("count", new WordCountBolt()).fieldsGrouping("keywordFinder", new Fields("keyword"));
-		builder.setBolt("writeCount", new WriteCountBolt()).fieldsGrouping("count", new Fields("keyword"));
-		builder.setBolt("writeTweet", new WriteTweetBolt()).fieldsGrouping("keywordFinder", new Fields("keyword"));
+		
+		builder.setBolt("split", new WordSplitBolt(), 2).shuffleGrouping("twitter");
+		builder.setBolt("count", new WordCountBolt(), 2).fieldsGrouping("split", new Fields("keyword"));
+		builder.setBolt("writeCount", new WriteCountBolt(), 2).fieldsGrouping("count", new Fields("keyword"));
+		
+		builder.setBolt("keywordFinder", new KeywordFinderBolt(), 2).shuffleGrouping("twitter");
+		builder.setBolt("writeTweet", new WriteTweetBolt(), 1).fieldsGrouping("keywordFinder", new Fields("keyword"));
 
 		Config configS = new Config();
 		configS.setDebug(false);
@@ -44,14 +46,14 @@ public class TwitterTopology
 		// configS.setNumAckers(1);
 		configS.setMaxSpoutPending(200);
 
-		LocalCluster cluster = new LocalCluster();
-		System.out.println("starting topology...");
-		cluster.submitTopology("twitter", configS, builder.createTopology());
-		Utils.sleep(100000);
-		System.out.println("killing topology...");
-		cluster.killTopology("twitter");
-
-		// StormSubmitter.submitTopology("twitter", configS, builder.createTopology());
-		// System.out.println("Twitter topology should be running...");
+//		LocalCluster cluster = new LocalCluster();
+//		System.out.println("starting topology...");
+//		cluster.submitTopology("twitter", configS, builder.createTopology());
+//		Utils.sleep(100000);
+//		System.out.println("killing topology...");
+//		cluster.killTopology("twitter");
+		
+		StormSubmitter.submitTopology("twitter", configS, builder.createTopology());
+		System.out.println("Twitter topology should be running...");
 	}
 }
