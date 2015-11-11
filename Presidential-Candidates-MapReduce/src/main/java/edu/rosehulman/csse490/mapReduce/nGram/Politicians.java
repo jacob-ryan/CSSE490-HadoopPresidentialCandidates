@@ -1,4 +1,4 @@
-package edu.rosehulman.csse490.dataImport;
+package edu.rosehulman.csse490.mapReduce.nGram;
 
 import java.util.*;
 

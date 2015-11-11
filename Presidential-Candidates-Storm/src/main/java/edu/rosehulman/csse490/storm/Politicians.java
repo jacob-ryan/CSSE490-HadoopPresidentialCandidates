@@ -24,13 +24,6 @@ public class Politicians
 				add("RealBenCarson");
 			}
 				});
-		this.republicans.put("Chris Christie", new ArrayList<String>()
-				{
-			{
-				add("ChrisChristie");
-				add("GovChristie");
-			}
-				});
 		this.republicans.put("Ted Cruz", new ArrayList<String>()
 				{
 			{
@@ -43,61 +36,22 @@ public class Politicians
 				add("CarlyFiorina");
 			}
 				});
-		this.republicans.put("Jim Gilmore", new ArrayList<String>()
-				{
-			{
-				add("gov_gilmore");
-			}
-				});
-		this.republicans.put("Lindey Graham", new ArrayList<String>()
-				{
-			{
-				add("LindseyGrahamSC");
-			}
-				});
-		this.republicans.put("Mike Huckabee", new ArrayList<String>()
-				{
-			{
-				add("GovMikeHuckabee");
-			}
-				});
-		this.republicans.put("Bobby Jindal", new ArrayList<String>()
-				{
-			{
-				// add("Jindalin2016");
-				add("BobbyJindal");
-			}
-				});
 		this.republicans.put("John Kasich", new ArrayList<String>()
 				{
 			{
 				add("JohnKasich");
 			}
 				});
-		this.republicans.put("George Pataki", new ArrayList<String>()
-				{
-			{
-				add("GovernorPataki");
-				add("Gpataki2016");
-			}
-				});
 		this.republicans.put("Rand Paul", new ArrayList<String>()
 				{
 			{
 				add("RandPaul");
-				add("Rand2016");
 			}
 				});
 		this.republicans.put("Marco Rubio", new ArrayList<String>()
 				{
 			{
 				add("marcorubio");
-			}
-				});
-		this.republicans.put("Rick Santorum", new ArrayList<String>()
-				{
-			{
-				add("RickSantorum");
 			}
 				});
 		this.republicans.put("Donald Trump", new ArrayList<String>()
@@ -117,14 +71,12 @@ public class Politicians
 				{
 			{
 				add("HillaryClinton");
-				add("HillaryIn2016");
 			}
 				});
 		this.democrats.put("Lawrence Lessig", new ArrayList<String>()
 				{
 			{
 				add("lessig");
-				add("Lessig2016");
 			}
 				});
 		this.democrats.put("Martin O'Malley", new ArrayList<String>()

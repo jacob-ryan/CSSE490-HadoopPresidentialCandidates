@@ -36,33 +36,32 @@ public class WordSplitBolt implements IBasicBolt
 	public void execute(Tuple input, BasicOutputCollector collector)
 	{
 		Status tweet = (Status) input.getValueByField("tweet");
-		//String text = tweet.getText().replaceAll("\\p{Punct}", "").toLowerCase();
-		//String[] words = text.split(" ");
-		String word = "test";
+		String text = tweet.getText().replaceAll("\\p{Punct}", "").toLowerCase();
+		String[] words = text.split(" ");
 		String keyword = "NONAME";
 		boolean flag = false;
 
-//		for (String word : words)
-//		{
-//			for (int j = 0; j < this.candidates.size(); j++)
-//			{
-//				if (word.toLowerCase().equals(this.candidates.get(j).toLowerCase()))
-//				{
-//					keyword = word;
-//					flag = true;
-//					break;
-//				}
-//			}
-//			if (flag)
-//			{
-//				break;
-//			}
-//		}
-//
-//		for (String word : words)
-//		{
+		for (String word : words)
+		{
+			for (int j = 0; j < this.candidates.size(); j++)
+			{
+				if (word.toLowerCase().equals(this.candidates.get(j).toLowerCase()))
+				{
+					keyword = word;
+					flag = true;
+					break;
+				}
+			}
+			if (flag)
+			{
+				break;
+			}
+		}
+
+		for (String word : words)
+		{
 			collector.emit(new Values(keyword, word));
-//		}
+		}
 	}
 
 	@SuppressWarnings("rawtypes")
