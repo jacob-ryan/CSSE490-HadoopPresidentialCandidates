@@ -15,12 +15,12 @@ public class TwitterFeedRetriever
 	public static void main(String[] args) throws TwitterException, IOException, InterruptedException
 	{
 		TwitterFeedRetriever tweets = new TwitterFeedRetriever();
-
-		tweets.WriteAllPoliticianSearchTweets(600);
-		tweets.GetAllPoliticianTimelineTweets(200);
+		
+		tweets.WriteAllPoliticianSearchTweets(1000);
+		tweets.GetAllPoliticianTimelineTweets(1000);
 	}
 
-	public TwitterFeedRetriever()
+	public TwitterFeedRetriever() throws TwitterException
 	{
 		this.twitter = new T4JWrapper();
 		this.limits = new TwitterRateLimitViewer();
@@ -35,7 +35,8 @@ public class TwitterFeedRetriever
 		{
 			for (String username : politicianMap.get(key))
 			{
-				String localOutput = "./TweetData/" + username + ".txt";
+				String dateString = new SimpleDateFormat("yyyy-MM-dd_HH-mm").format(new Date());
+				String localOutput = "./TweetData/" + username + "/static-" + dateString + ".txt";
 				TwitterWriter writer = new TwitterWriter(localOutput);
 
 				int callsRemaining = this.limits.GetSearchTweetsRemainingCalls(this.twitter.getTwitterObject());
@@ -48,9 +49,9 @@ public class TwitterFeedRetriever
 					ArrayList<Status> tweets = this.twitter.searchAndReturnTweets("@" + username, tweetsPerCandidate);
 					writer.writeTweets(tweets);
 					writer.close();
-					String dateString = new SimpleDateFormat("yyyy-MM-dd_HH-mm").format(new Date());
-					String hdfsOutput = "/tmp/TweetData/" + username + "/static-" + dateString + ".txt";
-					HDFS.uploadToHDFS(localOutput, hdfsOutput);
+					
+					String hdfsPath = "/tmp/TweetData/" + username;
+					HDFS.uploadToHDFS(localOutput, hdfsPath);
 				}
 			}
 		}
