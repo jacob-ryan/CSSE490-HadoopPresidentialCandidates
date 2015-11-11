@@ -62,7 +62,7 @@ public class WriteCountBolt implements IBasicBolt
 					@Override
 					public int compare(Entry<String, Integer> a, Entry<String, Integer> b)
 					{
-						return a.getValue().compareTo(b.getValue());
+						return -a.getValue().compareTo(b.getValue());
 					}
 						});
 				
@@ -75,8 +75,10 @@ public class WriteCountBolt implements IBasicBolt
 				FSDataOutputStream out = fs.create(path);
 				
 				String data = "";
+				int times = 0;
 				for (Map.Entry<String, Integer> entry : sortedWords)
 				{
+					if (times++ > 100) break;
 					data = entry.getKey() + "\t" + entry.getValue() + "\n";
 					out.write(data.getBytes());
 				}
