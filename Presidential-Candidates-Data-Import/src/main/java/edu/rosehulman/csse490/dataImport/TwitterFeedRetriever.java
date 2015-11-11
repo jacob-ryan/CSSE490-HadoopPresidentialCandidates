@@ -26,7 +26,7 @@ public class TwitterFeedRetriever
 		this.twitter = new T4JWrapper();
 		this.limits = new TwitterRateLimitViewer();
 		this.candidates = new Politicians();
-		this.tweetsPerCandidate = 100;
+		this.tweetsPerCandidate = 1000;
 	}
 
 	public void WriteAllPoliticianSearchTweets() throws TwitterException, IOException, InterruptedException

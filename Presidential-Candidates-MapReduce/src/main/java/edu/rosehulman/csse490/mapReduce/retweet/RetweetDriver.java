@@ -27,7 +27,7 @@ public class RetweetDriver extends Configured implements Tool
 		Job job = Job.getInstance(conf, "P.C. Re-tweet Average MapReduce");
 		job.setJarByClass(RetweetDriver.class);
 
-		FileInputFormat.addInputPath(job, new Path("/tmp/RetweetData/retweets.txt"));
+		FileInputFormat.addInputPath(job, new Path("/tmp/RetweetData"));
 		FileOutputFormat.setOutputPath(job, new Path("/tmp/Output/Retweet/"));
 
 		job.setMapperClass(RetweetMapper.class);

@@ -8,7 +8,7 @@ public class NGramExport implements TimerListener
 {
 	public NGramExport()
 	{
-		Timer timer = new Timer(60);
+		Timer timer = new Timer(600);
 		timer.addTimerListener(this);
 		timer.start();
 	}
@@ -24,6 +24,9 @@ public class NGramExport implements TimerListener
 			for (String handle : candidate)
 			{
 				System.out.println("[NGramExport] Exporting n-gram data for Twitter handle: " + handle + "...");
+				new ProcessRunner("rm",
+						"/var/www/html/N-gram/" + handle + ".txt");
+				
 				new ProcessRunner("hadoop",
 						"fs",
 						"-get",

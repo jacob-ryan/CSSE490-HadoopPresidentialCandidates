@@ -4,7 +4,7 @@ public class DataExport
 {
 	// Exporting data from the following projects:
 	// - N-grams MapReduce job output (HDFS: /tmp/Output/N-gram/<candidate name>/<part-...>)
-	// - Retweet MapReduce job output (HDFS: /tmp/Output/Retweet/retweets.txt)
+	// - Retweet MapReduce job output (HDFS: /tmp/Output/Retweet/part*)
 	// - Storm word-count analysis output (local: ./StormWordCount/<candidate name>.txt)
 	//
 	// Other useful directories:
