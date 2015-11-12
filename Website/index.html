@@ -4,11 +4,11 @@
 	<title>Presidential Candidates</title>
 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-	<link rel="stylesheet" href="//cdn.datatables.net/1.9.4/css/jquery.dataTables.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.9.4/css/jquery.dataTables.css">
 
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-	<script src="//cdn.datatables.net/1.9.4/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/1.9.4/js/jquery.dataTables.min.js"></script>
 	<script src="index.js"></script>
 
 	<style>
@@ -50,14 +50,24 @@
 			</div>
 			<div class="col-md-3">
 				<select class="form-control" id="candidate">
-					<option value="JebBush">Jeb Bush</option>
-					<option value="RealBenCarson">Ben Carson</option>
-					<option value="tedcruz">Ted Cruz</option>
-					<option value="CarlyFiorina">Carly Fiorina</option>
-					<option value="JohnKasich">John Kasich</option>
-					<option value="RandPaul">Rand Paul</option>
-
-					<option value="realDonaldTrump">Donald Trump</option>
+					<optgroup label="Republicans">
+						<option value="JebBush">Jeb Bush</option>
+						<option value="RealBenCarson">Ben Carson</option>
+						<option value="tedcruz">Ted Cruz</option>
+						<option value="CarlyFiorina">Carly Fiorina</option>
+						<option value="JohnKasich">John Kasich</option>
+						<option value="RandPaul">Rand Paul</option>
+						<option value="marcorubio">Marco Rubio</option>
+						<option value="realDonaldTrump">Donald Trump</option>
+					</optgroup>
+					<optgroup label="Democrats">
+						<option value="LincolnChafee">Lincoln Chafee</option>
+						<option value="HillaryClinton">Hillary Clinton</option>
+						<option value="lessig">Lawrence Lessig</option>
+						<option value="MartinOMalley">Martin O'Malley</option>
+						<option value="BernieSanders">Bernie Sanders</option>
+						<option value="JimWebbUSA">Jim Webb</option>
+					</optgroup>
 				</select>
 			</div>
 			<div class="col-md-2 text-right">
